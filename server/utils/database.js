@@ -1,9 +1,15 @@
 const Sequelize = require("sequelize");
+const config = require("../config/config");
 
-const sequelize = new Sequelize("cp-mail", "root", "costarica2", {
-  dialect: "mysql",
-  host: "localhost",
-});
+const sequelize = new Sequelize(
+  config.dbName,
+  config.dbRoot,
+  config.dbPassword,
+  {
+    dialect: config.sequelizeDialect,
+    host: config.sequelizeHost,
+  }
+);
 
 sequelize.sync().then(async () => {
   try {

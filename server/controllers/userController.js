@@ -1,10 +1,9 @@
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
+const config = require("../config/config");
 
 exports.register = async (req, res) => {
-  console.log(req);
-
   const { name, email, password } = req.body;
 
   const userAlreadyRegistered = await User.findOne({ where: { email } }).catch(
@@ -45,7 +44,7 @@ exports.login = async (req, res) => {
 
   const jwToken = jwt.sign(
     { id: user.id, email: user.email },
-    "CP_MAIL_SECRET"
+    config.jwtSecret
   );
 
   res.status(200).send({ message: "Welcome back!", token: jwToken });
