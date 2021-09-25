@@ -10,10 +10,10 @@ import {
   TextField,
 } from "@material-ui/core";
 import useLoginStyles from "./makeLoginStyles";
+import fetchLogin from "../../core/fetchLogin";
 
 const Login = () => {
   const classes = useLoginStyles();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -23,12 +23,17 @@ const Login = () => {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("I am clicked", email, password);
+    fetchLogin({ email, password });
+  };
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={handleSubmit}>
           <TextField
             autoComplete="email"
             id="email"

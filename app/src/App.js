@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Login from "./components/Login/Login.jsx";
-import Register from "./components/Register/Register.jsx";
-import ErrorBoundary from "./components/ErrorBoundary.jsx";
+import Login from "./components/Login/Login";
+import Register from "./components/Register/Register";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const App = () => {
   return (

@@ -14,12 +14,16 @@ const Login = () => {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
+  const handleOnSubmit = (e) => {
+    e.preventDefault();
+    console.log(email, password);
+  };
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} onSubmit={handleOnSubmit} noValidate>
           <TextField
             autoComplete="email"
             id="email"
