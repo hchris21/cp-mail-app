@@ -37,11 +37,20 @@ exports.sendReply = async (req, res) => {
 
 // GET controllers: get inbox, get outbox, get replies
 exports.getSentMails = async (req, res) => {
-  const { userId } = req;
+  const { email } = req;
+  const { page, limit } = req.query;
 
-  const sentMails = await User.findByPk(userId, { include: ["mails"] })
-    .then((result) => {
-      const { mails } = result;
+  const offset = page * limit;
+
+  const sentMails = await Mail.findAndCountAll({
+    where: { from: email },
+    offset: Number(offset),
+    limit: Number(limit),
+  })
+    .then((mails) => {
+      if (mails.count === 0)
+        return res.status(200).send({ message: "No mails found" });
+
       return mails;
     })
     .catch((err) => {
@@ -49,15 +58,26 @@ exports.getSentMails = async (req, res) => {
       return res.status(500).send({ message: "No mails found" });
     });
 
-  if (sentMails.length) return res.status(200).send(sentMails);
+  if (sentMails.count) return res.status(200).send(sentMails);
 };
 
 exports.getReceivedMails = async (req, res) => {
   const { email } = req;
+  const { page, limit } = req.query;
 
-  const receivedMails = await Mail.findAll({ where: { to: email } })
+  const offset = page * limit;
+
+  const receivedMails = await Mail.findAndCountAll({
+    where: { to: email },
+    offset: Number(offset),
+    limit: Number(limit),
+  })
     .then((mails) => {
       console.log(mails);
+      console.log(mails.count === 0);
+      if (mails.count === 0)
+        return res.status(200).send({ message: "No mails found" });
+
       return mails;
     })
     .catch((err) => {
@@ -65,7 +85,7 @@ exports.getReceivedMails = async (req, res) => {
       return res.status(500).send({ message: "Cannot find emails." });
     });
 
-  if (receivedMails.length) return res.status(200).send(receivedMails);
+  if (receivedMails.count) return res.status(200).send(receivedMails);
 };
 
 exports.getRepliesByMailId = async (req, res) => {
