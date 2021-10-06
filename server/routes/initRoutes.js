@@ -9,7 +9,12 @@ module.exports = function initRoutes(app) {
   app.use(cookieParser());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
-  app.use(cors());
+  app.use(
+    cors({
+      credentials: true,
+      origin: "http://localhost:3000",
+    })
+  );
 
   // User
   app.post("/register", userController.register);

@@ -73,8 +73,6 @@ exports.getReceivedMails = async (req, res) => {
     limit: Number(limit),
   })
     .then((mails) => {
-      console.log(mails);
-      console.log(mails.count === 0);
       if (mails.count === 0)
         return res.status(200).send({ message: "No mails found" });
 

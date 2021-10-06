@@ -54,7 +54,11 @@ exports.login = async (req, res) => {
   );
 
   return res
-    .cookie("jwt_token", jwtToken)
+    .cookie("jwt_token", jwtToken, {
+      httpOnly: true,
+      sameSite: "None",
+      secure: true,
+    })
     .status(200)
     .send({ message: "Welcome back!" });
 };
