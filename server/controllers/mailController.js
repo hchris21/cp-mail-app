@@ -46,6 +46,7 @@ exports.getSentMails = async (req, res) => {
     where: { from: email },
     offset: Number(offset),
     limit: Number(limit),
+    order: [["createdAt", "DESC"]],
   })
     .then((mails) => {
       if (mails.count === 0)
@@ -71,6 +72,7 @@ exports.getReceivedMails = async (req, res) => {
     where: { to: email },
     offset: Number(offset),
     limit: Number(limit),
+    order: [["createdAt", "DESC"]],
   })
     .then((mails) => {
       if (mails.count === 0)
@@ -87,11 +89,15 @@ exports.getReceivedMails = async (req, res) => {
 };
 
 exports.getRepliesByMailId = async (req, res) => {
-  const { mailId } = req.body;
+  const { mailId } = req.query;
 
-  const replies = await Mail.findByPk(mailId, { include: ["replies"] })
-    .then((result) => {
-      const { replies } = result;
+  const replies = await Reply.findAll({
+    where: { mailId },
+    order: [["createdAt", "ASC"]],
+  })
+    .then((replies) => {
+      if (replies.length === 0)
+        return res.status(500).send({ message: "No mails found" });
       return replies;
     })
     .catch((err) => {
@@ -100,4 +106,23 @@ exports.getRepliesByMailId = async (req, res) => {
     });
 
   if (replies.length) return res.status(200).send(replies);
+};
+
+// DELETE Routes: deleteMail()
+exports.deleteMail = async (req, res) => {
+  const { mailId } = req.body;
+
+  const mailToDelete = await Mail.findOne({ where: { id: mailId } });
+
+  if (mailToDelete) {
+    // Delete also the associated replies to the mail
+    await Reply.destroy({ where: { mailId } });
+
+    await mailToDelete.destroy().catch((err) => {
+      return res.status(500).send({ message: "Could not delete mail." });
+    });
+    return res.status(200).send({ message: "Mail deleted." });
+  }
+
+  return res.status(500).send({ message: "Could not delete mail." });
 };
