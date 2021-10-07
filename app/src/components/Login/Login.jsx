@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import {
   Button,
+  Box,
   Checkbox,
   Container,
   CssBaseline,
@@ -12,10 +14,12 @@ import {
 import useLoginStyles from "./makeLoginStyles";
 import fetchLogin from "../../core/fetchLogin";
 
-const Login = () => {
+const Login = (props) => {
   const classes = useLoginStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const history = useHistory();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -23,10 +27,17 @@ const Login = () => {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("I am clicked", email, password);
-    fetchLogin({ email, password });
+
+    const response = await fetchLogin({ email, password });
+
+    if (response.status === 200) {
+      props.setLoggedIn(true);
+      history.push("/inbox");
+    } else {
+      setError("Provided email and/or password do not match!");
+    }
   };
 
   return (
@@ -66,6 +77,19 @@ const Login = () => {
             required
             fullWidth
           />
+          {error && (
+            <Box
+              sx={{
+                color: "red",
+                fontWeight: "bold",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {error}
+            </Box>
+          )}
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
@@ -81,7 +105,12 @@ const Login = () => {
           </Button>
           <Grid container>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link
+                variant="body2"
+                onClick={() => {
+                  history.push("/register");
+                }}
+              >
                 {"Don't have an account? Register here"}
               </Link>
             </Grid>
