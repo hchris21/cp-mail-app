@@ -24,6 +24,7 @@ module.exports = function initRoutes(app) {
   app.post("/sendmail", [verifyToken], mailController.sendMail);
   app.get("/outbox", [verifyToken], mailController.getSentMails);
   app.get("/inbox", [verifyToken], mailController.getReceivedMails);
+  app.delete("/deleteMail", [verifyToken], mailController.deleteMail);
 
   // Reply
   app.post("/reply", [verifyToken], mailController.sendReply);
