@@ -25,7 +25,7 @@ exports.register = async (req, res) => {
     console.error("Error: ", err);
     return res
       .status(500)
-      .send({ message: "Cannot register user with this email" });
+      .send({ errorMessage: "Cannot register user with this email" });
   });
 
   if (savedUser)
@@ -43,10 +43,11 @@ exports.login = async (req, res) => {
 
   const user = await User.findOne({ where: { email } });
 
-  if (!user || user.password !== password)
-    return res
-      .status(400)
-      .send({ message: "Provided email and/or password do not match!" });
+  if (!user || user.password !== password) {
+    return res.status(500).send({
+      erorrMessage: "Provided email and/or password do not match!",
+    });
+  }
 
   const jwtToken = jwt.sign(
     { id: user.id, email: user.email },
