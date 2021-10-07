@@ -16,8 +16,10 @@ import useViewMailStyles from "./makeViewMailStyles";
 import formatDate from "../../helpers/formatDate";
 import getCurrentUser from "../../helpers/getCurrentUser";
 
-const ViewMail = () => {
+const ViewMail = ({ isLoggedIn }) => {
   const history = useHistory();
+  if (!isLoggedIn) history.push("/");
+
   const classes = useViewMailStyles();
   const [sendReply, setSendReply] = useState(false);
   const [replyMessage, setReplyMessage] = useState("");

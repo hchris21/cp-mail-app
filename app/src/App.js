@@ -25,7 +25,7 @@ const App = () => {
           <Mail isLoggedIn={loggedIn} />
         </Route>
         <Route path="/viewmail">
-          <ViewMail />
+          <ViewMail isLoggedIn={loggedIn} />
         </Route>
         <Route path="/">
           <Login setLoggedIn={handleLoggedIn} />
