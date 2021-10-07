@@ -1,35 +1,34 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import Login from "./components/Login/Login";
-import Register from "./components/Register/Register";
-import ErrorBoundary from "./components/ErrorBoundary";
+import React, { useState } from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Login, Register, Inbox, Sent, Mail, ViewMail } from "./components";
 
 const App = () => {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  const handleLoggedIn = (isLoggedIn) => {
+    setLoggedIn(isLoggedIn);
+  };
+
   return (
     <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-            <li>
-              <Link to="/register">Register</Link>
-            </li>
-          </ul>
-        </nav>
-      </div>
-
       <Switch>
-        <Route path="/login">
-          <ErrorBoundary>
-            <Login />
-          </ErrorBoundary>
+        <Route path="/inbox">
+          <Inbox isLoggedIn={loggedIn} />
         </Route>
         <Route path="/register">
-          <ErrorBoundary>
-            <Register />
-          </ErrorBoundary>
+          <Register />
+        </Route>
+        <Route path="/sent">
+          <Sent isLoggedIn={loggedIn} />
+        </Route>
+        <Route path="/mail">
+          <Mail isLoggedIn={loggedIn} />
+        </Route>
+        <Route path="/viewmail">
+          <ViewMail />
+        </Route>
+        <Route path="/">
+          <Login setLoggedIn={handleLoggedIn} />
         </Route>
       </Switch>
     </Router>
