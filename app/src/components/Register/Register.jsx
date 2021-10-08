@@ -55,6 +55,7 @@ const Login = () => {
         <form className={classes.form} onSubmit={handleOnSubmit}>
           <TextField
             autoComplete="first-name"
+            data-testid="first-name-input"
             id="first-name"
             label="First name"
             margin="normal"
@@ -71,6 +72,7 @@ const Login = () => {
           />
           <TextField
             autoComplete="last-name"
+            data-testid="last-name-input"
             id="last-name"
             label="Last name"
             margin="normal"
@@ -87,6 +89,7 @@ const Login = () => {
           />
           <TextField
             autoComplete="email"
+            data-testid="email-input"
             id="email"
             label="Email"
             margin="normal"
@@ -103,6 +106,7 @@ const Login = () => {
           />
           <TextField
             autoComplete="current-password"
+            data-testid="password-input"
             id="password"
             label="Password"
             margin="normal"
@@ -132,6 +136,7 @@ const Login = () => {
           )}
           <Button
             type="submit"
+            data-testid="submit-button"
             fullWidth
             variant="contained"
             color="primary"

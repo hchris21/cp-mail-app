@@ -47,6 +47,7 @@ const Login = (props) => {
         <form className={classes.form} onSubmit={handleSubmit}>
           <TextField
             autoComplete="email"
+            data-testid="email-input"
             id="email"
             label="Email"
             margin="normal"
@@ -63,6 +64,7 @@ const Login = (props) => {
           />
           <TextField
             autoComplete="current-password"
+            data-testid="password-input"
             id="password"
             label="Password"
             margin="normal"
@@ -91,6 +93,7 @@ const Login = (props) => {
             </Box>
           )}
           <FormControlLabel
+            data-testid="remember-me-checkbox"
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
@@ -99,6 +102,7 @@ const Login = (props) => {
             fullWidth
             variant="contained"
             color="primary"
+            data-testid="submit-button"
             className={classes.submit}
           >
             Log In
@@ -107,6 +111,7 @@ const Login = (props) => {
             <Grid item>
               <Link
                 variant="body2"
+                data-testid="register-link"
                 onClick={() => {
                   history.push("/register");
                 }}
