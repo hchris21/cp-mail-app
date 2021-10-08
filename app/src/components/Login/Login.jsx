@@ -36,7 +36,7 @@ const Login = (props) => {
       props.setLoggedIn(true);
       history.push("/inbox");
     } else {
-      setError("Provided email and/or password do not match!");
+      setError(response.message);
     }
   };
 

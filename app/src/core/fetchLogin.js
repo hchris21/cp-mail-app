@@ -3,10 +3,6 @@ import axios from "axios";
 const fetchLogin = (loginData) => {
   const { email, password } = loginData;
 
-  if (!email || !password) {
-    return "Both email and password are needed!";
-  }
-
   const result = axios({
     method: "post",
     url: "http://localhost:5000/login",
@@ -20,7 +16,10 @@ const fetchLogin = (loginData) => {
       return response;
     })
     .catch((error) => {
-      return error;
+      return {
+        status: error.response.status,
+        message: error.response.data.message,
+      };
     });
 
   return result;

@@ -3,14 +3,6 @@ import axios from "axios";
 const fetchRegister = (registerData) => {
   const { firstName, lastName, email, password } = registerData;
 
-  if (!email || !password) {
-    return "Both email and password are needed!";
-  }
-
-  if (!firstName || !lastName) {
-    return "Both first and last name are needed!";
-  }
-
   const result = axios({
     method: "post",
     url: "http://localhost:5000/register",
@@ -26,7 +18,10 @@ const fetchRegister = (registerData) => {
       return response;
     })
     .catch((error) => {
-      return error;
+      return {
+        status: error.response.status,
+        message: error.response.data.message,
+      };
     });
 
   return result;

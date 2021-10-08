@@ -44,7 +44,7 @@ const Login = () => {
     if (response.status === 200) {
       history.push("/");
     } else {
-      setError("User already registered!");
+      setError(response.message);
     }
   };
 
@@ -52,7 +52,7 @@ const Login = () => {
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <form className={classes.form} onSubmit={handleOnSubmit} noValidate>
+        <form className={classes.form} onSubmit={handleOnSubmit}>
           <TextField
             autoComplete="first-name"
             id="first-name"

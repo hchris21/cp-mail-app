@@ -58,7 +58,7 @@ const MailTable = ({ isInbox }) => {
   return (
     <>
       <TableContainer component={Paper}>
-        <Table aria-label="simple table">
+        <Table aria-label="mail table">
           <TableHead>
             <TableRow>
               <TableCell align="center">{isInbox ? "From" : "To"}</TableCell>
@@ -142,6 +142,7 @@ const MailTable = ({ isInbox }) => {
           </TableBody>
         </Table>
       </TableContainer>
+
       <div>
         {isLoading && (
           <Box

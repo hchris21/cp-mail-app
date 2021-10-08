@@ -11,12 +11,15 @@ import { Navbar } from "../";
 import useMailStyles from "./makeMailStyles";
 import sendMail from "../../core/sendMail";
 
-export const Mail = () => {
+export const Mail = ({ isLoggedIn }) => {
   const classes = useMailStyles();
   const history = useHistory();
+  if (!isLoggedIn) history.push("/");
+
   const [to, setTo] = useState("");
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   const handleToChange = (e) => {
     setTo(e.target.value);
@@ -32,8 +35,11 @@ export const Mail = () => {
     e.preventDefault();
 
     const response = await sendMail({ to, subject, message });
+
     if (response.status === 200) {
       history.push("/sent");
+    } else {
+      setError(response.message);
     }
   };
 
@@ -91,6 +97,19 @@ export const Mail = () => {
               required
               fullWidth
             />
+            {error && (
+              <Box
+                sx={{
+                  color: "red",
+                  fontWeight: "bold",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {error}
+              </Box>
+            )}
             <Box className={classes.buttonsWrapper}>
               <Button
                 type="submit"
@@ -102,12 +121,11 @@ export const Mail = () => {
                 Send
               </Button>
               <Button
-                type="submit"
                 fullWidth
                 variant="contained"
                 color="secondary"
                 className={classes.submit}
-                onClick={history.push("/inbox")}
+                onClick={() => history.push("/inbox")}
               >
                 Discard
               </Button>
