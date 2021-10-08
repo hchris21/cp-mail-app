@@ -7,17 +7,14 @@ const User = db.users;
 exports.register = async (req, res) => {
   const { first_name, last_name, email, password } = req.body;
 
-  const userAlreadyRegistered = await User.findOne({ where: { email } }).catch(
-    (err) => {
-      console.error("Error: ", err);
-    }
-  );
-
-  if (userAlreadyRegistered) {
-    return res
-      .status(409)
-      .send({ message: "User already registered with this email" });
-  }
+  await User.findOne({ where: { email } })
+    .then((user) => {
+      if (user)
+        return res
+          .status(401)
+          .send({ message: "The email provided is already registered." });
+    })
+    .catch((err) => res.status(500).send({ message: err }));
 
   const newUser = new User({ first_name, last_name, email, password });
 
@@ -25,7 +22,7 @@ exports.register = async (req, res) => {
     console.error("Error: ", err);
     return res
       .status(500)
-      .send({ errorMessage: "Cannot register user with this email" });
+      .send({ message: "Cannot register user with this email" });
   });
 
   if (savedUser)
@@ -45,7 +42,7 @@ exports.login = async (req, res) => {
 
   if (!user || user.password !== password) {
     return res.status(500).send({
-      erorrMessage: "Provided email and/or password do not match!",
+      message: "Provided email and/or password do not match!",
     });
   }
 
