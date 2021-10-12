@@ -13,7 +13,10 @@ const deleteMail = (mailId) => {
       return response;
     })
     .catch((error) => {
-      return error;
+      return {
+        status: error.response.status,
+        message: error.response.data.message,
+      };
     });
 
   return result;

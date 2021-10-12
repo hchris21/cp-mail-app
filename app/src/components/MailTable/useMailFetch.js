@@ -17,9 +17,6 @@ const useMailFetch = (pageNumber, isInbox) => {
       withCredentials: true,
     })
       .then((response) => {
-        if (response.data.message) {
-          throw new Error(response.data.message);
-        }
         setMails((prevMails) => {
           return [...prevMails, ...response.data.rows];
         });
@@ -28,7 +25,7 @@ const useMailFetch = (pageNumber, isInbox) => {
       })
       .catch((error) => {
         setIsLoading(false);
-        setError(error.message);
+        setError(error.response.data.message);
       });
   }, [isInbox, pageNumber]);
 
