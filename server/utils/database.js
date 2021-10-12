@@ -28,4 +28,6 @@ db.mails.belongsTo(db.users, { foreignKey: "userId", as: "user" });
 db.mails.hasMany(db.replies, { as: "replies" });
 db.replies.belongsTo(db.mails, { foreignKey: "mailId", as: "mail" });
 
+db.sequelize.sync();
+
 module.exports = db;

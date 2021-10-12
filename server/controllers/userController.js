@@ -7,23 +7,16 @@ const User = db.users;
 exports.register = async (req, res) => {
   const { first_name, last_name, email, password } = req.body;
 
-  await User.findOne({ where: { email } })
-    .then((user) => {
-      if (user)
-        return res
-          .status(401)
-          .send({ message: "The email provided is already registered." });
-    })
-    .catch((err) => res.status(500).send({ message: err }));
+  await User.findOne({ where: { email } }).then((user) => {
+    if (user)
+      return res
+        .status(401)
+        .send({ message: "The email provided is already registered." });
+  });
 
   const newUser = new User({ first_name, last_name, email, password });
 
-  const savedUser = await newUser.save().catch((err) => {
-    console.error("Error: ", err);
-    return res
-      .status(500)
-      .send({ message: "Cannot register user with this email" });
-  });
+  const savedUser = await newUser.save();
 
   if (savedUser)
     return res.status(200).send({ message: "User registered successfully" });
@@ -32,19 +25,17 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
-  if (!password || !email) {
+  if (!password || !email)
     return res
       .status(400)
-      .send({ message: "Both email and password are required!" });
-  }
+      .send({ message: "Password and/or email is missing in request!" });
 
   const user = await User.findOne({ where: { email } });
 
-  if (!user || user.password !== password) {
-    return res.status(500).send({
-      message: "Provided email and/or password do not match!",
-    });
-  }
+  if (!user || user.password !== password)
+    return res
+      .status(401)
+      .send({ message: "Provided email and/or password do not match!" });
 
   const jwtToken = jwt.sign(
     { id: user.id, email: user.email },

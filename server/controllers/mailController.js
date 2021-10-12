@@ -9,12 +9,15 @@ exports.sendMail = async (req, res) => {
   const { userId, email } = req;
   const { subject, message, to } = req.body;
 
-  const newMail = new Mail({ subject, message, to, from: email, userId });
-
-  const savedMail = await newMail.save().catch((err) => {
-    console.error("Error: ", err);
-    return res.status(500).send({ message: "Cannot send mail." });
+  const newMail = new Mail({
+    subject,
+    message,
+    to,
+    from: email,
+    userId,
   });
+
+  const savedMail = await newMail.save();
 
   if (savedMail)
     return res.status(200).send({ message: "Mail sent successfully." });
@@ -26,10 +29,7 @@ exports.sendReply = async (req, res) => {
 
   const newReply = new Reply({ to, from: email, message, mailId });
 
-  const savedReply = await newReply.save().catch((err) => {
-    console.error("Error: ", err);
-    return res.status(500).send({ message: "Cannot send reply." });
-  });
+  const savedReply = await newReply.save();
 
   if (savedReply)
     return res.status(200).send({ message: "Reply sent successfully." });
@@ -47,17 +47,11 @@ exports.getSentMails = async (req, res) => {
     offset: Number(offset),
     limit: Number(limit),
     order: [["createdAt", "DESC"]],
-  })
-    .then((mails) => {
-      if (mails.count === 0)
-        return res.status(200).send({ message: "No mails found" });
+  }).then((mails) => {
+    if (mails.count === 0) throw new Error("No mails found!");
 
-      return mails;
-    })
-    .catch((err) => {
-      console.error("Error: ", err);
-      return res.status(500).send({ message: "No mails found" });
-    });
+    return mails;
+  });
 
   if (sentMails.count) return res.status(200).send(sentMails);
 };
@@ -73,17 +67,11 @@ exports.getReceivedMails = async (req, res) => {
     offset: Number(offset),
     limit: Number(limit),
     order: [["createdAt", "DESC"]],
-  })
-    .then((mails) => {
-      if (mails.count === 0)
-        return res.status(200).send({ message: "No mails found" });
+  }).then((mails) => {
+    if (mails.count === 0) throw new Error("No mails found!");
 
-      return mails;
-    })
-    .catch((err) => {
-      console.error("Error: ", err);
-      return res.status(500).send({ message: "Cannot find emails." });
-    });
+    return mails;
+  });
 
   if (receivedMails.count) return res.status(200).send(receivedMails);
 };
@@ -94,16 +82,11 @@ exports.getRepliesByMailId = async (req, res) => {
   const replies = await Reply.findAll({
     where: { mailId },
     order: [["createdAt", "ASC"]],
-  })
-    .then((replies) => {
-      if (replies.length === 0)
-        return res.status(500).send({ message: "No mails found" });
-      return replies;
-    })
-    .catch((err) => {
-      console.error("Error: ", err);
-      return res.status(500).send({ message: "No replies found." });
-    });
+  }).then((replies) => {
+    if (replies.length === 0)
+      return res.status(404).send({ message: "No mails found" });
+    return replies;
+  });
 
   if (replies.length) return res.status(200).send(replies);
 };
@@ -118,9 +101,8 @@ exports.deleteMail = async (req, res) => {
     // Delete also the associated replies to the mail
     await Reply.destroy({ where: { mailId } });
 
-    await mailToDelete.destroy().catch((err) => {
-      return res.status(500).send({ message: "Could not delete mail." });
-    });
+    await mailToDelete.destroy();
+
     return res.status(200).send({ message: "Mail deleted." });
   }
 
