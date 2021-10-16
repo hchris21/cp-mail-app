@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useReducer } from "react";
 import {
   Box,
   Button,
@@ -9,6 +9,7 @@ import {
 import { useHistory } from "react-router-dom";
 import { Navbar } from "../";
 import useMailStyles from "./makeMailStyles";
+import { initialState, mailReducer } from "./mailReducer";
 import sendMail from "../../core/sendMail";
 
 export const Mail = ({ isLoggedIn }) => {
@@ -16,19 +17,11 @@ export const Mail = ({ isLoggedIn }) => {
   const history = useHistory();
   if (!isLoggedIn) history.push("/");
 
-  const [to, setTo] = useState("");
-  const [subject, setSubject] = useState("");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  const [state, dispatch] = useReducer(mailReducer, initialState);
+  const { to, subject, message, error } = state;
 
-  const handleToChange = (e) => {
-    setTo(e.target.value);
-  };
-  const handleSubjectChange = (e) => {
-    setSubject(e.target.value);
-  };
-  const handleMessageChange = (e) => {
-    setMessage(e.target.value);
+  const handleChange = (inputName) => (e) => {
+    dispatch({ type: inputName, payload: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -39,7 +32,7 @@ export const Mail = ({ isLoggedIn }) => {
     if (response.status === 200) {
       history.push("/sent");
     } else {
-      setError(response.message);
+      dispatch({ type: "error", payload: response.message });
     }
   };
 
@@ -55,7 +48,7 @@ export const Mail = ({ isLoggedIn }) => {
               label="To"
               margin="normal"
               name="to"
-              onChange={handleToChange}
+              onChange={handleChange("to")}
               value={to}
               variant="outlined"
               InputLabelProps={{
@@ -70,7 +63,7 @@ export const Mail = ({ isLoggedIn }) => {
               label="Subject"
               margin="normal"
               name="subject"
-              onChange={handleSubjectChange}
+              onChange={handleChange("subject")}
               value={subject}
               variant="outlined"
               InputLabelProps={{
@@ -88,7 +81,7 @@ export const Mail = ({ isLoggedIn }) => {
               multiline
               minRows={10}
               maxRows={25}
-              onChange={handleMessageChange}
+              onChange={handleChange("message")}
               value={message}
               variant="outlined"
               InputLabelProps={{

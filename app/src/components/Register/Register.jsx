@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useReducer } from "react";
 import { useHistory } from "react-router-dom";
 import {
   Button,
@@ -9,29 +9,19 @@ import {
 } from "@material-ui/core";
 import useRegisterStyles from "./makeRegisterStyles";
 import fetchRegister from "../../core/fetchRegister";
+import { initialState, registerReducer } from "./registerReducer";
 
 const Login = () => {
   const classes = useRegisterStyles();
   const history = useHistory();
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [state, dispatch] = useReducer(registerReducer, initialState);
+  const { firstName, lastName, email, password, error } = state;
 
-  const handleFirstNameChange = (e) => {
-    setFirstName(e.target.value);
+  const handleChange = (inputName) => (e) => {
+    dispatch({ type: inputName, payload: e.target.value });
   };
-  const handleLastNameChange = (e) => {
-    setLastName(e.target.value);
-  };
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
+
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     const response = await fetchRegister({
@@ -44,7 +34,7 @@ const Login = () => {
     if (response.status === 200) {
       history.push("/");
     } else {
-      setError(response.message);
+      dispatch({ type: "error", payload: response.message });
     }
   };
 
@@ -60,7 +50,7 @@ const Login = () => {
             label="First name"
             margin="normal"
             name="first-name"
-            onChange={handleFirstNameChange}
+            onChange={handleChange("firstname")}
             value={firstName}
             variant="outlined"
             InputLabelProps={{
@@ -77,7 +67,7 @@ const Login = () => {
             label="Last name"
             margin="normal"
             name="last-name"
-            onChange={handleLastNameChange}
+            onChange={handleChange("lastname")}
             value={lastName}
             variant="outlined"
             InputLabelProps={{
@@ -94,7 +84,7 @@ const Login = () => {
             label="Email"
             margin="normal"
             name="email"
-            onChange={handleEmailChange}
+            onChange={handleChange("email")}
             value={email}
             variant="outlined"
             InputLabelProps={{
@@ -111,7 +101,7 @@ const Login = () => {
             label="Password"
             margin="normal"
             name="password"
-            onChange={handlePasswordChange}
+            onChange={handleChange("password")}
             type="password"
             value={password}
             variant="outlined"

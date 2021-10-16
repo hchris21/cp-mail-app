@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useReducer } from "react";
 import { useHistory } from "react-router-dom";
 import {
   Button,
@@ -12,21 +12,19 @@ import {
   TextField,
 } from "@material-ui/core";
 import useLoginStyles from "./makeLoginStyles";
+import { loginReducer, initialState } from "./loginReducer";
 import fetchLogin from "../../core/fetchLogin";
 
 const Login = (props) => {
   const classes = useLoginStyles();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const history = useHistory();
+  const [state, dispatch] = useReducer(loginReducer, initialState);
+  const { email, password, error } = state;
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+  const handleChange = (inputName) => (e) => {
+    dispatch({ type: inputName, payload: e.target.value });
   };
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -36,7 +34,7 @@ const Login = (props) => {
       props.setLoggedIn(true);
       history.push("/inbox");
     } else {
-      setError(response.message);
+      dispatch({ type: "error", payload: response.message });
     }
   };
 
@@ -52,7 +50,7 @@ const Login = (props) => {
             label="Email"
             margin="normal"
             name="email"
-            onChange={handleEmailChange}
+            onChange={handleChange("email")}
             value={email}
             variant="outlined"
             InputLabelProps={{
@@ -69,7 +67,7 @@ const Login = (props) => {
             label="Password"
             margin="normal"
             name="password"
-            onChange={handlePasswordChange}
+            onChange={handleChange("password")}
             type="password"
             value={password}
             variant="outlined"
