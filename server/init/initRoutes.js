@@ -8,7 +8,7 @@ module.exports = function initRoutes(app) {
   app.post("/login", userController.login);
 
   // Mail
-  app.post("/sendmail", mailController.sendMail);
+  app.post("/sendmail", [verifyToken], mailController.sendMail);
   app.get("/outbox", [verifyToken], mailController.getSentMails);
   app.get("/inbox", [verifyToken], mailController.getReceivedMails);
   app.delete("/deleteMail", [verifyToken], mailController.deleteMail);

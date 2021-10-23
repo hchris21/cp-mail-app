@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const config = require("../config/config");
+const config = require("../env");
 
 module.exports = verifyJwt = (req, res, next) => {
   const { cookies } = req;

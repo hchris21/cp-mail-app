@@ -1,7 +1,6 @@
 const db = require("../utils/database");
 
 const Mail = db.mails;
-const User = db.users;
 const Reply = db.replies;
 
 // POST controllers: send mail, reply mail
