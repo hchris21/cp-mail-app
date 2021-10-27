@@ -41,6 +41,24 @@ const useNavbarStyles = makeStyles((theme) => ({
       },
     },
   },
+  title: {
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
+  },
+  more: {
+    [theme.breakpoints.between("xs", "sm")]: {
+      display: "flex",
+    },
+    [theme.breakpoints.up("sm")]: {
+      display: "none",
+    },
+  },
+  drawer: {
+    "& .MuiDrawer-paper": {
+      width: "15vw",
+    },
+  },
 }));
 
 export default useNavbarStyles;
