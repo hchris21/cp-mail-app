@@ -8,7 +8,7 @@ const useReplyFetch = (mailId) => {
   useEffect(() => {
     axios({
       method: "GET",
-      url: "http://localhost:5000/replies",
+      url: "http://localhost:6969/replies",
       params: { mailId },
       withCredentials: true,
     })

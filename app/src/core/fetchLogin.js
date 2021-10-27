@@ -5,7 +5,7 @@ const fetchLogin = (loginData) => {
 
   const result = axios({
     method: "post",
-    url: "http://localhost:5000/login",
+    url: "http://localhost:6969/login",
     data: {
       email,
       password,

@@ -3,7 +3,7 @@ import axios from "axios";
 const sendNewReply = ({ message, to, mailId }) => {
   const result = axios({
     method: "post",
-    url: "http://localhost:5000/reply",
+    url: "http://localhost:6969/reply",
     data: {
       message,
       to,

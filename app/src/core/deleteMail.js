@@ -3,7 +3,7 @@ import axios from "axios";
 const deleteMail = (mailId) => {
   const result = axios({
     method: "delete",
-    url: "http://localhost:5000/deleteMail",
+    url: "http://localhost:6969/deleteMail",
     data: {
       mailId,
     },

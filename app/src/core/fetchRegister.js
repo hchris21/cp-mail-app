@@ -5,7 +5,7 @@ const fetchRegister = (registerData) => {
 
   const result = axios({
     method: "post",
-    url: "http://localhost:5000/register",
+    url: "http://localhost:6969/register",
     data: {
       first_name: firstName,
       last_name: lastName,

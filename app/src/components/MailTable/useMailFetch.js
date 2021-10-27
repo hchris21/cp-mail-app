@@ -12,7 +12,7 @@ const useMailFetch = (pageNumber, isInbox) => {
 
     axios({
       method: "GET",
-      url: `http://localhost:5000/${isInbox ? "inbox" : "outbox"}`,
+      url: `http://localhost:6969/${isInbox ? "inbox" : "outbox"}`,
       params: { page: pageNumber, limit: 15 },
       withCredentials: true,
     })

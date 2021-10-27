@@ -3,7 +3,7 @@ import axios from "axios";
 const sendMail = ({ to, subject, message }) => {
   const result = axios({
     method: "post",
-    url: "http://localhost:5000/sendmail",
+    url: "http://localhost:6969/sendmail",
     data: {
       to,
       subject,

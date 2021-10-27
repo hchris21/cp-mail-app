@@ -5,5 +5,5 @@ module.exports = {
   dbName: "cp-mail-test",
   dbRoot: "root",
   dbPassword: "costarica2",
-  PORT: 5000,
+  PORT: 6969,
 };
